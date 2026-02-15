@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة الإدمن</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+</head>
+<body>
+    <div class="adminbt">
+        <!-- زر حذف كل السجلات -->
+        <form action="{{ url_for('delete_all') }}" method="POST">
+            <button type="submit" class="logout" >حذف</button>
+        </form>
+        <!-- زر تسجيل الخروج -->
+        <form action="{{ url_for('logout') }}" method="GET">
+            <button type="submit" class="logout">الخروج</button>
+        </form>
+    </div>
+<div class="table-container">
+    <h1>سجلات الحضور والمغادرة</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>الاسم</th>
+                <th>التاريخ</th>
+                <th>الدخول</th>
+                <th>الخروج</th>
+                <th>عدد الساعات</th>
+                <th>الموقع</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.username }}</td>
+                <td>{{ record.date }}</td>
+                <td>{{ record.check_in if record.check_in else "-" }}</td>
+                <td>{{ record.check_out if record.check_out else "-" }}</td>
+                <td>{{ record.hours if record.hours else 0 }}</td>
+                <td>{{ record['location'] or "-" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

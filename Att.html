@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+</head>
+<body>
+    
+    <div class="card2">
+        <div class="card-content">
+            <h2>تسجيل الحضور والمغادرة</h2>
+
+<form method="POST">
+
+  <input type="hidden" name="location" id="location-input" value="">
+
+  <button type="submit" name="action" value="check_in" class="boton-elegante">تسجيل حضور</button>
+  <button type="submit" name="action" value="check_out" class="boton-elegante">تسجيل مغادرة</button>
+</form>
+
+<div id="status" style="margin-top: 10px; color: #555;"></div>
+
+<script>
+  const status = document.getElementById('status');
+  const locationInput = document.getElementById('location-input');
+
+  status.textContent = 'جاري جلب الموقع...';
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const lat = position.coords.latitude.toFixed(6);
+        const lng = position.coords.longitude.toFixed(6);
+        locationInput.value = lat + ',' + lng;
+        status.textContent = 'تم جلب الموقع بنجاح';
+        status.style.color = 'green';
+      },
+      error => {
+        status.textContent = 'تعذر جلب الموقع';
+        status.style.color = 'red';
+      },
+      { timeout: 12000 }
+    );
+  } else {
+    status.textContent = 'المتصفح لا يدعم تحديد الموقع';
+  }
+</script>
+
+        </div>
+
+        <!-- زر تسجيل الخروج -->
+        <div>
+            <form action="{{ url_for('logout') }}" method="GET">
+                <button type="submit" id="logout" class="logout">تسجيل الخروج</button>
+            </form>
+        </div>
+
+        <!-- رسالة الحالة -->
+        <div>
+            {% if message %}
+                <p id="statusText">{{ message }}</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 YARA ABUARQOUB. ALL RIGHTS</p>
+    </footer>
+
+</body>
+</html>
